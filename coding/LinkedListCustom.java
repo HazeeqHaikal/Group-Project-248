@@ -67,6 +67,40 @@ public class LinkedListCustom {
         size++;
     }
 
+    // insert node at any position in the list
+    public void insertAtPosition(Food data, int position) {
+        Node newNode = new Node(data);
+        if (position == 1) {
+            newNode.setNext(head);
+            head = newNode;
+        } else {
+            Node temp = head;
+            for (int i = 1; i < position - 1; i++) {
+                temp = temp.getNext();
+            }
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
+        }
+        size++;
+    }
+
+    // insert node at middle of the list
+    public void insertAtMiddle(Food data) {
+        Node newNode = new Node(data);
+        if (head == null) {
+            head = newNode;
+        } else {
+            Node temp = head;
+            int mid = (size % 2 == 0) ? (size / 2) : ((size + 1) / 2);
+            for (int i = 1; i < mid; i++) {
+                temp = temp.getNext();
+            }
+            newNode.setNext(temp.getNext());
+            temp.setNext(newNode);
+        }
+        size++;
+    }
+
     // remove node anywhere in the list
     public void removeNode(Food data) {
         Node temp = head;

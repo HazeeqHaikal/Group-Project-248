@@ -1,4 +1,5 @@
-import java.util.Date;
+import java.util.*;
+import java.io.*;
 
 public class Food {
     private String foodName;
@@ -55,6 +56,84 @@ public class Food {
 
     public double getNetWeight() {
         return netWeight;
+    }
+
+    // calculate the total weight
+    public double calculateTotalWeight() {
+        return netWeight * quantity;
+    }
+
+    // calculate price after SST
+    public double afterSST() {
+        return price * 1.06;
+    }
+
+    // calculate the total price
+    public double calculateTotalPrice() {
+        return afterSST() * quantity;
+    }
+
+    // member or non-member
+    public boolean isMember() {
+        // read from file
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader("data.txt"));
+            String line = br.readLine();
+            while (line != null) {
+                boolean isMember = Boolean.parseBoolean(line.split(",")[2]);
+                if (isMember) {
+                    return true;
+                }
+                line = br.readLine();
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("File " + e.getMessage() + " not found.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
+        }
+
+        return false;
+    }
+
+    // check if today is their birthday
+    public boolean isBirthday() {
+        // read from file
+        BufferedReader br;
+        try {
+            br = new BufferedReader(new FileReader("data.txt"));
+            // get current date
+            Date currentDate = new Date();
+            String line = br.readLine();
+            while (line != null) {
+                if (line.split(",")[1].equals(String.format("%td/%tm", currentDate, currentDate))) {
+                    return true;
+                }
+                line = br.readLine();
+            }
+            br.close();
+        } catch (IOException e) {
+            System.out.println("File " + e.getMessage() + " not found.");
+        } catch (Exception e) {
+            System.out.println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
+        }
+
+        return false;
+    }
+
+    // calculate the total price after discount
+    // if member and birthday then the discount will be stacked
+    public double discountedPrice() {
+        if (isMember()) {
+            return calculateTotalPrice() * 0.9;
+        }
+
+        if (isBirthday()) {
+            return calculateTotalPrice() * 0.8;
+        }                   
+
+        return calculateTotalPrice();
     }
 
     // printer
