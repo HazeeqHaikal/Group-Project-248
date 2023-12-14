@@ -5,7 +5,7 @@ import java.io.*;
 // optional: sorting, insertion, merging, reversing
 
 public class Main {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         // 2 Scanners for String and Integer
         Scanner strInput = new Scanner(System.in);
         Scanner intInput = new Scanner(System.in);
@@ -28,6 +28,7 @@ public class Main {
             System.out.print("1. Login\n2. Register\n3. Exit\nEnter your choice: ");
             choice = intInput.nextInt();
 
+            // login
             if (choice == 1) {
                 System.out.print("Enter your username: ");
                 String username = strInput.nextLine();
@@ -35,16 +36,28 @@ public class Main {
                 System.out.print("Enter your password: ");
                 String password = strInput.nextLine();
 
-                // TODO: validate the username and password from the text file
-            } else if (choice == 2) {
+                // validate the username and password from the text file
+                if (Account.verify(username, password)) {
+                    System.out.println("Login successful.");
+                } else {
+                    System.out.println("Login failed.");
+                }
+                // if (verify(username, password)) {
+                // System.out.println("Login successful.");
+                // }
+
+            }
+
+            // register a new account
+            else if (choice == 2) {
                 System.out.print("Enter your name: ");
                 String name = strInput.nextLine();
 
-                boolean isStrong = false;
+                // boolean isStrong = false;
                 String password, passwordc = "";
 
                 // validate the password to meet the requirements
-                while (!isStrong) {
+                while (Account.checkStrength(passwordc) == false) {
                     System.out.print("Enter your password: ");
                     password = strInput.nextLine();
 
@@ -52,25 +65,15 @@ public class Main {
                     passwordc = strInput.nextLine();
 
                     // check if the password is the same as the confirmed password
-                    if (!passwordc.equals(password)) {
+                    while (!passwordc.equals(password)) {
                         System.out.println("Password does not match.");
+                        System.out.print("Confirm your password: ");
+                        passwordc = strInput.nextLine();
                     }
 
                     // check if the password is strong
-                    // else if (password.length() < 8) {
-                    // System.out.println("Password must be at least 8 characters long.");
-                    // }
-
-                    // use regex to check if the password contains at least 1 uppercase, 1
-                    // lowercase and 1 digit and 8 characters long
-                    else if (!password.matches("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$")) {
-                        System.out.println(
-                                "Password must contain at least 1 uppercase, 1 lowercase, 1 digit and 8 characters long.");
-                    }
-
-                    // if all the conditions are met, the password is strong
-                    else {
-                        isStrong = true;
+                    if (Account.checkStrength(passwordc) == false) {
+                        System.out.println("Password is not strong enough.");
                     }
                 }
 
@@ -103,41 +106,17 @@ public class Main {
 
                 }
 
-                // save the user's information to the text file
-                try {
-                    // output to file
-                    PrintWriter pw = new PrintWriter(new FileWriter("data.txt", true));
+                boolean isRegistered = Account.register(name, passwordc, birthdate, isMember);
 
-                    // write to file
-                    pw.println(name + "," + passwordc + "," + birthdate + "," + isMember);
-
-                    // close the output stream
-                    pw.close();
-                } catch (IOException e) {
-                    System.out.println("File " + e.getMessage() + " not found.");
-                } catch (Exception e) {
-                    System.out
-                            .println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
+                if (isRegistered) {
+                    System.out.println("Registration successful.");
+                } else {
+                    System.out.println("Registration failed.");
                 }
-            }
-
-            // initialize the bufferedReader and printWriter
-            BufferedReader br;
-            PrintWriter pw;
-            try {
-                // Read from file
-                br = new BufferedReader(new FileReader("input.txt"));
-
-                // output to file
-                pw = new PrintWriter(new FileWriter("output.txt"));
-
-                // close the input and output stream
-                br.close();
-                pw.close();
-            } catch (IOException e) {
-                System.out.println("File " + e.getMessage() + " not found.");
-            } catch (Exception e) {
-                System.out.println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
+            } else if (choice == 3) {
+                System.out.println("Thank you for using the Food Inventory System.");
+            } else {
+                System.out.println("Invalid input. Please try again.");
             }
         }
 

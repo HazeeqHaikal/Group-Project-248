@@ -9,18 +9,15 @@
 public class LinkedListCustom {
     // atrributes
     private Node head;
-    private int size;
 
     // default constructor
     public LinkedListCustom() {
         head = null;
-        size = 0;
     }
 
     // normal constructor
     public LinkedListCustom(Node head, int size) {
         this.head = head;
-        this.size = size;
     }
 
     // getter
@@ -30,18 +27,9 @@ public class LinkedListCustom {
         return head;
     }
 
-    // show the size of the list
-    public int getSize() {
-        return size;
-    }
-
     // setter
     public void setHead(Node head) {
         this.head = head;
-    }
-
-    public void setSize(int size) {
-        this.size = size;
     }
 
     // insert node at the front of the list
@@ -49,7 +37,6 @@ public class LinkedListCustom {
         Node newNode = new Node(data);
         newNode.setNext(head);
         head = newNode;
-        size++;
     }
 
     // insert node at the back of the list
@@ -64,7 +51,6 @@ public class LinkedListCustom {
             }
             temp.setNext(newNode);
         }
-        size++;
     }
 
     // insert node at any position in the list
@@ -81,7 +67,6 @@ public class LinkedListCustom {
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
         }
-        size++;
     }
 
     // insert node at middle of the list
@@ -91,14 +76,23 @@ public class LinkedListCustom {
             head = newNode;
         } else {
             Node temp = head;
-            int mid = (size % 2 == 0) ? (size / 2) : ((size + 1) / 2);
+            // int mid = (size % 2 == 0) ? (size / 2) : ((size + 1) / 2);
+            int mid = 0;
+            while (temp.getNext() != null) {
+                temp = temp.getNext();
+                mid++;
+            }
+
+            mid = (mid % 2 == 0) ? (mid / 2) : ((mid + 1) / 2);
+
+            temp = head;
+
             for (int i = 1; i < mid; i++) {
                 temp = temp.getNext();
             }
             newNode.setNext(temp.getNext());
             temp.setNext(newNode);
         }
-        size++;
     }
 
     // remove node anywhere in the list
@@ -117,7 +111,6 @@ public class LinkedListCustom {
             return;
         }
         prev.setNext(temp.getNext());
-        size--;
     }
 
     // status of whether the list is empty or has an element(s)

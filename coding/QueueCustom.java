@@ -84,21 +84,4 @@ public class QueueCustom {
         }
     }
 
-    // store all the data in the list into a txt file
-    public void storeToFile() {
-        Node temp = head;
-        try {
-            PrintWriter pw = new PrintWriter(new FileWriter("output.txt"));
-            while (temp != null) {
-                pw.println(temp.getData());
-                temp = temp.getNext();
-            }
-            pw.close();
-        } catch (IOException e) {
-            System.out.println("File " + e.getMessage() + " not found.");
-        } catch (Exception e) {
-            System.out.println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
-        }
-    }
-
 }
