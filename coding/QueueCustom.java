@@ -85,3 +85,57 @@ public class QueueCustom {
     }
 
 }
+
+// class QUEUE extends ListNode {
+//     public QUEUE() {
+//         super();
+//     }
+
+//     public void enqueue(Object elem) {
+//         Node newNode = new Node(elem);
+//         if (this.first == null) {
+//             this.first = newNode;
+//             this.last = newNode;
+//         } else {
+//             this.last.link = newNode;
+//             this.last = newNode;
+//         }
+//     }
+
+//     public Object dequeue() {
+//         if (this.first != null) {
+//             Object data = this.first.data;
+//             this.first = this.first.link;
+//             return data;
+//         }
+//         return null;
+//     }
+
+//     public boolean isEmpty() {
+//         return this.first == null;
+//     }
+
+//     public Object getFirst() {
+//         if (this.first != null) {
+//             return this.first.data;
+//         } else {
+//             return null;
+//         }
+//     }
+
+//     public Object getNext() {
+//         if (this.first != null && this.first.link != null) {
+//             return this.first.link.data;
+//         } else {
+//             return null;
+//         }
+//     }
+
+//     public Object getLast() {
+//         if (this.last != null) {
+//             return this.last.data;
+//         } else {
+//             return null;
+//         }
+//     }
+// }

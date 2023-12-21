@@ -67,6 +67,18 @@ public class Account extends FileHandling {
         this.isMember = isMember;
     }
 
+    public boolean verifying() throws IOException {
+        return verify(this.username, this.password);
+    }
+
+    public boolean registering() throws IOException {
+        return register(this.username, this.password, this.birthdate, this.isMember);
+    }
+
+    public boolean checkingStrength() {
+        return checkStrength(this.password);
+    }
+
     // method to verify the username and password exists
     public static boolean verify(String username, String password) throws IOException {
 
