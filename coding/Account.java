@@ -79,16 +79,36 @@ public class Account extends FileHandling {
         return checkStrength(this.password);
     }
 
-    // method to verify the username and password exists
-    public static boolean verify(String username, String password) throws IOException {
+    public String generatingUserID() {
+        return generateUserID();
+    }
 
-        // read the file line by line
+    public String getUserID() throws IOException {
+        FileHandling data = new FileHandling("data.txt");
         String[] lines = data.read().split("\n");
         for (String line : lines) {
             // split the line into an array
             String[] arr = line.split(",");
-            String user = arr[0];
-            String pass = arr[1];
+            String user = arr[1];
+            if (user.equals(this.username)) {
+                return arr[0];
+            }
+        }
+
+        return "";
+    }
+
+    // method to verify the username and password exists
+    public static boolean verify(String username, String password) throws IOException {
+
+        // read the file line by line
+        data = new FileHandling("data.txt");
+        String[] lines = data.read().split("\n");
+        for (String line : lines) {
+            // split the line into an array
+            String[] arr = line.split(",");
+            String user = arr[1];
+            String pass = arr[2];
 
             // check if the username and password matches
             if (user.equals(username) && pass.equals(password)) {
@@ -106,11 +126,18 @@ public class Account extends FileHandling {
             throws IOException {
 
         // check if the username already exists
+        data = new FileHandling("data.txt");
         String[] lines = data.read().split("\n");
+
+        // check if null
+        if (lines[0].equals("")) {
+            return true;
+        }
+
         for (String line : lines) {
             // split the line into an array
             String[] arr = line.split(",");
-            String user = arr[0];
+            String user = arr[1];
 
             // check if the username already exists
             if (user.equals(username)) {
@@ -158,6 +185,17 @@ public class Account extends FileHandling {
         }
 
         return true;
+    }
+
+    // generate random string for userID
+    public static String generateUserID() {
+        String chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890";
+        StringBuilder sb = new StringBuilder();
+        for (int i = 0; i < 6; i++) {
+            int index = (int) (Math.random() * chars.length());
+            sb.append(chars.charAt(index));
+        }
+        return sb.toString();
     }
 
     // toString

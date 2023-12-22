@@ -8,6 +8,14 @@ public class Food {
     private Date expiryDate;
     private double netWeight;
 
+    public Food() {
+        this.foodName = "";
+        this.quantity = 0;
+        this.price = 0.0;
+        this.expiryDate = new Date();
+        this.netWeight = 0.0;
+    }
+
     public Food(String foodName, int quantity, double price, Date expiryDate, double netWeight) {
         this.foodName = foodName;
         this.quantity = quantity;
@@ -83,6 +91,7 @@ public class Food {
             while (line != null) {
                 boolean isMember = Boolean.parseBoolean(line.split(",")[2]);
                 if (isMember) {
+                    br.close();
                     return true;
                 }
                 line = br.readLine();
@@ -90,6 +99,7 @@ public class Food {
             br.close();
         } catch (IOException e) {
             System.out.println("File " + e.getMessage() + " not found.");
+
         } catch (Exception e) {
             System.out.println("Error: " + e.getMessage() + "\nAt line: " + e.getStackTrace()[0].getLineNumber());
         }
@@ -131,9 +141,22 @@ public class Food {
 
         if (isBirthday()) {
             return calculateTotalPrice() * 0.8;
-        }                   
+        }
 
         return calculateTotalPrice();
+    }
+
+    // generate random foodID with a length of 6 combination string and letter
+    public String generateFoodID() {
+        String foodID = "";
+        String characters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+        int length = 6;
+
+        for (int i = 0; i < length; i++) {
+            foodID += characters.charAt((int) (Math.random() * characters.length()));
+        }
+
+        return foodID;
     }
 
     // printer
