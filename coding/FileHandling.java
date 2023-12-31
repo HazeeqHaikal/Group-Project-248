@@ -12,8 +12,18 @@ public class FileHandling {
         writer = new PrintWriter(new FileWriter(fileName, true));
     }
 
+    public void setFile(String fileName) throws IOException {
+        reader = new BufferedReader(new FileReader(fileName));
+        writer = new PrintWriter(new FileWriter(fileName, true));
+    }
+
     public void write(String text) {
         writer.println(text);
+    }
+
+    public void close() throws IOException {
+        reader.close();
+        writer.close();
     }
 
     // read all lines
@@ -24,12 +34,26 @@ public class FileHandling {
             text += line + "\n";
             line = reader.readLine();
         }
+
         return text;
     }
 
-    public void close() throws IOException {
-        reader.close();
-        writer.close();
+    public String[] readLines() throws IOException {
+        String[] lines = read().split("\n");
+        return lines;
+    }
+
+    public void emptyFiles() throws IOException {
+        String text = read();
+        if (text.equals("")) {
+            System.out.println("The file is empty.");
+        }
+    }
+
+    // clear the content of the file
+    public void clear(String fileName) throws IOException {
+        writer = new PrintWriter(new FileWriter(fileName));
+        writer.print("");
     }
 
 }

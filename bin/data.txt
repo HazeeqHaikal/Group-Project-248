@@ -1,2 +1,5 @@
 HGT1VF,hazeeq,hazeeq,24/04/2004,true,admin
 RYZV9F,khairul,khairul,25/03/2004,true,user
+R60W20,shahmir,sh@HM1rs,29/05/2004,false,user
+4TBPQV,hanafi,h@N@F1Ig,5/05/2004,false,user
+J8FBBM,samuel,s@MU3las,9/7/2004,false,user

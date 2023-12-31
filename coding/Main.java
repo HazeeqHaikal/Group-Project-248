@@ -1,5 +1,6 @@
 import java.util.*;
 import java.io.*;
+import java.text.SimpleDateFormat;
 
 // linkedlist must have removal, searching, updating and traversal
 // optional: sorting, insertion, merging, reversing
@@ -16,16 +17,11 @@ public class Main {
         Scanner strInput = new Scanner(System.in);
         Scanner intInput = new Scanner(System.in);
 
-        // String adminType = "admin";
-        // String adminType = "user";
-
         // LinkedList to store Food objects
         LinkedList<Food> foodList = new LinkedList<Food>();
-        // queue to store Food objects
-        Queue<Food> foodQueue = new LinkedList<Food>();
-        Queue<String> foodQueueString = new LinkedList<String>();
-        // custom linkedlist to store Food objects
-        LinkedListCustom foodListCustom = new LinkedListCustom();
+        // LinkedListCustom foodListCustom = new LinkedListCustom();
+        QueueCustom foodQueueCustom = new QueueCustom();
+        Food food = new Food();
 
         // welcome message
         System.out.println("Welcome to the Food Inventory System");
@@ -33,9 +29,8 @@ public class Main {
 
         int choice = 0;
 
-        // while loop to keep the program running
-        // while (choice != 3) {
-        System.out.print("1. Login\n2. Register\n\nEnter your choice: ");
+        // login or register
+        System.out.print("1. Login\n2. Register\n3. Exit\n\nEnter your choice: ");
         choice = intInput.nextInt();
 
         System.out.println();
@@ -76,130 +71,70 @@ public class Main {
                 }
             }
 
-            System.out.println("Welcome, " + name);
+            System.out.println("Welcome, " + name + ".\n");
 
             while (true) {
                 if (userType.equalsIgnoreCase("admin")) {
-                    // admin can update the food order list for the order queue
-                    // which mean it will delete the last food object in the queue
-                    // food order list will be stored in a text file
-                    // and add it to the finishedOrder.txt file
+                    Staff staff = new Staff();
+
                     System.out
-                            .print("\n1. Update Food Order List\n2. View Food Order List\n3. Exit\n\nEnter your choice: ");
+                            .print("1. Update Food Order List\n2. View Finished Food Order List\n3. Add Food\n4. View Food Menu\n5. Delete Food Menu\n6. Sort Food Menu By Price\n7. Register New Admin\n8. Exit\n\nEnter your choice: ");
                     int adminChoice = intInput.nextInt();
+
+                    System.out.println();
 
                     // update food order list
                     if (adminChoice == 1) {
-                        // read the food order list from the text file
+                        staff.updateFood();
+                    }
 
-                        FileHandling foodOrder = new FileHandling("foodOrder.txt");
-                        String linesFoodOrder = foodOrder.read();
-                        String[] foodOrderPerLine = linesFoodOrder.split("\n");
+                    else if (adminChoice == 2)
+                        staff.viewFinishedOrder();
 
-                        if (foodOrderPerLine.length == 0) {
-                            System.out.println("There is no food order list.");
-                            continue;
-                        }
+                    else if (adminChoice == 3) {
+                        System.out.print("Enter the food name: ");
+                        String foodName = strInput.nextLine();
 
-                        for (int i = 0; i < foodOrderPerLine.length; i++) {
-                            String[] foodDetails = foodOrderPerLine[i].split(",");
-                            String userID = foodDetails[0];
-                            String orderID = foodDetails[1];
+                        System.out.print("Enter the price (RM): ");
+                        double price = intInput.nextDouble();
 
-                            // store into queue
-                            foodQueueString.add(userID + "," + orderID);
-                        }
+                        System.out.print("Enter the net weight (gram): ");
+                        double netWeight = intInput.nextDouble();
 
-                        // display the food order list
-                        System.out.printf("%-20s%-20s\n", "User ID", "Order ID");
+                        food = new Food(foodName, price, netWeight);
 
-                        Queue<String> temporary = new LinkedList<String>();
+                        staff.addFood(food);
 
-                        while (!foodQueueString.isEmpty()) {
-                            String formattedString = foodQueueString.remove();
-                            String[] foodDetails = formattedString.split(",");
-                            String userID = foodDetails[0];
-                            String orderID = foodDetails[1];
+                        System.out.println("Food added successfully.\n");
 
-                            System.out.printf("%-20s%-20s\n", userID, orderID);
+                    }
 
-                            temporary.add(userID + "," + orderID);
-                        }
+                    else if (adminChoice == 4) {
+                        food.displayFoodMenu();
+                    }
 
-                        // restore the queue
-                        while (!temporary.isEmpty()) {
-                            foodQueueString.add(temporary.remove());
-                        }
+                    else if (adminChoice == 5) {
+                        System.out.print(
+                                "1. Delete from front\n2. Delete from back\n3. Delete from middle\n4. Delete all\n5. Delete by index\n\nEnter your choice: ");
+                        int deleteChoice = intInput.nextInt();
 
-                        // clear temporary queue
-                        temporary.clear();
+                        System.out.println();
 
-                        // delete the last food object in the queue
-                        String finishedOrder = foodQueueString.remove();
+                        if (deleteChoice >= 1 && deleteChoice <= 5)
+                            staff.removeFood(deleteChoice);
+                    }
 
-                        // store the finished order into finishedOrder.txt
-                        FileHandling finishedOrderFile = new FileHandling("finishedOrder.txt");
-                        finishedOrderFile.write(finishedOrder);
-                        finishedOrderFile.close();
+                    else if (adminChoice == 6) {
+                        staff.sortFoodByPrice();
+                        System.out.println("Food menu sorted successfully.\n");
+                    }
 
-                        // show the updated food order list
-                        System.out.println("\nUpdated Food Order List");
-                        System.out.printf("%-20s%-20s\n", "User ID", "Order ID");
+                    else if (adminChoice == 7) {
+                        Account register = new Account();
+                        register.registers("admin");
+                    }
 
-                        while (!foodQueueString.isEmpty()) {
-                            String formattedString = foodQueueString.remove();
-                            String[] foodDetails = formattedString.split(",");
-                            String userID = foodDetails[0];
-                            String orderID = foodDetails[1];
-
-                            System.out.printf("%-20s%-20s\n", userID, orderID);
-                        }
-
-                    } else if (adminChoice == 2) {
-                        // view food order list
-                        // read the food order list from the text file
-                        FileHandling foodOrder = new FileHandling("foodOrder.txt");
-                        String linesFoodOrder = foodOrder.read();
-                        String[] foodOrderPerLine = linesFoodOrder.split("\n");
-
-                        if (foodOrderPerLine.length == 0) {
-                            System.out.println("There is no food order list.");
-                            continue;
-                        }
-
-                        for (int i = 0; i < foodOrderPerLine.length; i++) {
-                            String[] foodDetails = foodOrderPerLine[i].split(",");
-                            String userID = foodDetails[0];
-                            String orderID = foodDetails[1];
-
-                            // store into queue
-                            foodQueueString.add(userID + "," + orderID);
-                        }
-
-                        // display the food order list
-                        System.out.printf("\n%-20s%-20s\n", "User ID", "Order ID");
-
-                        Queue<String> temporary = new LinkedList<String>();
-
-                        while (!foodQueueString.isEmpty()) {
-                            String formattedString = foodQueueString.remove();
-                            String[] foodDetails = formattedString.split(",");
-                            String userID = foodDetails[0];
-                            String orderID = foodDetails[1];
-
-                            System.out.printf("%-20s%-20s\n", userID, orderID);
-
-                            temporary.add(userID + "," + orderID);
-                        }
-
-                        // restore the queue
-                        foodQueueString = temporary;
-
-                        // clear temporary queue
-                        temporary.clear();
-
-                    } else if (adminChoice == 3) {
-                        System.out.println("Thank you for using the Food Inventory System.");
+                    else if (adminChoice == 8) {
                         break;
                     } else {
                         System.out.println("Invalid input. Please try again.");
@@ -207,239 +142,115 @@ public class Main {
 
                 } else {
 
-                    char order = 'Y';
+                    System.out.print(
+                            "1. Order food\n2. View finished order\n3. View unfinished order\n4. View total price\n5. Exit\n\nEnter your choice: ");
+                    int userChoice = intInput.nextInt();
 
-                    while (order == 'Y') {
-                        // show the menu
-                        System.out.printf("%-20s%-20s%-20s\n", "Food", "Price per Quantity", "Net Weight");
-                        System.out.printf("%-20s%-20s%-20s\n", "1. Nasi Lemak", "RM 3.50", "400g");
-                        System.out.printf("%-20s%-20s%-20s\n", "2. Satay", "RM 1.10", "150g");
-                        System.out.printf("%-20s%-20s%-20s\n", "3. Laksa", "RM 6.00", "350g");
-                        System.out.printf("%-20s%-20s%-20s\n", "4. Mee Goreng", "RM 5.00", "450g");
-                        System.out.printf("%-20s%-20s%-20s\n", "5. Roti Canai", "RM 1.50", "200g");
-                        System.out.printf("%-20s%-20s%-20s\n", "6. Nasi Ayam", "RM 6.50", "400g");
-                        System.out.printf("%-20s%-20s%-20s\n", "7. Nasi Kerabu", "RM 7.00", "400g");
-                        System.out.printf("%-20s%-20s%-20s\n", "8. Mee Udang", "RM 8.50", "450g");
-                        System.out.printf("%-20s%-20s%-20s\n", "9. Nasi Dagang", "RM 7.50", "350g");
-                        System.out.printf("%-20s%-20s%-20s\n", "10. Rojak", "RM 6.00", "250g");
+                    System.out.println();
 
-                        // ask the user to enter the food they want to order
-                        System.out.print("\nEnter the food you want to order: ");
-                        int foodChoice = intInput.nextInt();
+                    Account account = new Account();
 
-                        System.out.print("Enter the quantity: ");
-                        int quantity = intInput.nextInt();
+                    if (userChoice == 1) {
+                        while (true) {
+                            int length = food.countMenu();
 
-                        double price = 0;
-                        double netWeight = 0;
+                            food.displayFoodMenu();
 
-                        // get the current date and time in seconds
-                        Date currentDate = new Date();
-                        long currentTime = currentDate.getTime();
+                            System.out.print("\n\nEnter the food you want to order (1 - " + length + "): ");
+                            int foodChoice = intInput.nextInt();
 
-                        Date expiryDate = new Date();
-
-                        // set expiration date based on the food choice
-
-                        // nasi lemak - 12 hours
-                        // satay - 6 hours
-                        // laksa - 24 hours
-                        // mee goreng - 2 days
-                        // roti canai - 8 hours
-                        // nasi ayam - 12 hours
-                        // nasi kerabu - 12 hours
-                        // mee udang - 24 hours
-                        // nasi dagang - 12 hours
-                        // rojak - 2 hours
-
-                        String foodName = "";
-
-                        if (foodChoice == 1 || foodChoice == 6 || foodChoice == 7 || foodChoice == 9) {
-                            if (foodChoice == 1) {
-                                foodName = "Nasi Lemak";
-                                price = 3.50;
-                                netWeight = 400;
-                            } else if (foodChoice == 6) {
-                                foodName = "Nasi Ayam";
-                                price = 6.50;
-                                netWeight = 400;
-                            } else if (foodChoice == 7) {
-                                foodName = "Nasi Kerabu";
-                                price = 7.00;
-                                netWeight = 400;
-                            } else if (foodChoice == 9) {
-                                foodName = "Nasi Dagang";
-                                price = 7.50;
-                                netWeight = 350;
+                            if (foodChoice < 1 || foodChoice > length) {
+                                System.out.println("\nThere is no food with that number. Please try again.\n");
+                                continue;
                             }
-                            // 43200000 milliseconds = 12 hours
-                            expiryDate.setTime(currentTime + (hour * 12));
-                        } else if (foodChoice == 2) {
-                            foodName = "Satay";
-                            price = 1.10;
-                            netWeight = 150;
-                            // 21600000 miliseconds = 6 hours
-                            expiryDate.setTime(currentTime + (hour * 6));
-                        } else if (foodChoice == 3 || foodChoice == 8) {
-                            if (foodChoice == 3) {
-                                foodName = "Laksa";
-                                price = 6.00;
-                                netWeight = 350;
-                            } else if (foodChoice == 8) {
-                                foodName = "Mee Udang";
-                                price = 8.50;
-                                netWeight = 450;
+
+                            System.out.print("Enter the quantity: ");
+                            int quantity = intInput.nextInt();
+
+                            Food orderedFood = new Food();
+                            orderedFood.determineFood(foodChoice, quantity);
+
+                            // store the food object into the queue
+                            foodQueueCustom.enqueue(orderedFood);
+
+                            System.out.print("\n1. Order more food\n2. Proceed to checkout\n\nEnter your choice: ");
+                            int orderChoice = intInput.nextInt();
+
+                            if (orderChoice == 1) {
+                                continue;
+                            } else if (orderChoice == 2) {
+                                break;
+                            } else {
+                                System.out.println("Invalid input. Please try again.");
                             }
-                            // 86400000 miliseconds = 24 hours
-                            expiryDate.setTime(currentTime + (hour * 24));
-                        } else if (foodChoice == 4) {
-                            foodName = "Mee Goreng";
-                            price = 5.00;
-                            netWeight = 450;
-                            // 172800000 miliseconds = 48 hours
-                            expiryDate.setTime(currentTime + (hour * 48));
-                        } else if (foodChoice == 5) {
-                            foodName = "Roti Canai";
-                            price = 1.50;
-                            netWeight = 200;
-                            // 28800000 miliseconds = 8 hours
-                            expiryDate.setTime(currentTime + (hour * 8));
-                        } else if (foodChoice == 10) {
-                            foodName = "Rojak";
-                            price = 6.00;
-                            netWeight = 250;
-                            // 7200000 milliseconds = 2 hours
-                            expiryDate.setTime(currentTime + (hour * 2));
                         }
 
-                        price = price * quantity;
+                        // take from food queue and store into foodOrder.txt
+                        FileHandling foodOrder = new FileHandling("foodOrder.txt");
+                        String linesFoodOrder = foodOrder.read();
 
-                        Food food = new Food(foodName, quantity, price, expiryDate, netWeight);
+                        foodOrder.clear("foodOrder.txt");
 
-                        // store the food object into the queue
-                        foodQueue.add(food);
+                        String newOrder = "";
 
-                        System.out.println("Food added to the order list.");
-                        System.out.print("Do you want to order more food (Y/N): ");
-                        order = strInput.nextLine().charAt(0);
-                        order = Character.toUpperCase(order);
+                        // use custom queue
+                        while (!foodQueueCustom.isEmpty()) {
+                            food = (Food) foodQueueCustom.dequeue();
+                            String foodName = food.getFoodName();
+                            int quantity = food.getQuantity();
+                            double price = food.getPrice();
+                            double netWeight = food.getNetWeight();
+
+                            // generate a string of random numbers and letters for the order ID
+                            String orderID = food.generateFoodID();
+                            String userID = login.getUserID();
+
+                            newOrder += userID + "," + orderID + "," + foodName + "," + quantity + ","
+                                    + String.format("%,.2f", price) + "," + netWeight + "," + false + "\n";
+                        }
+
+                        newOrder += linesFoodOrder;
+
+                        // trim the last \n to prevent new spaces being created every time new order is
+                        // added
+                        newOrder = newOrder.substring(0, newOrder.length() - 1);
+
+                        foodOrder.write(newOrder);
+
+                        // close the file
+                        foodOrder.close();
+                    } else if (userChoice == 2) {
+                        account.viewOrder(login.getUserID(), true);
+
+                    } else if (userChoice == 3) {
+                        account.viewOrder(login.getUserID(), false);
+
+                    } else if (userChoice == 4) {
+                        double totalPrice = account.calculateTotalPrice(login.getUserID());
+                        System.out.printf("Total price of finished order: RM %,.2f\n\n", totalPrice);
+                    } else if (userChoice == 5) {
+                        break;
+                    } else {
+                        System.out.println("Invalid input. Please try again.");
                     }
-
-                    // take from food queue and store into foodOrder.txt
-                    FileHandling foodOrder = new FileHandling("foodOrder.txt");
-
-                    while (!foodQueue.isEmpty()) {
-                        Food food = foodQueue.remove();
-                        String foodName = food.getFoodName();
-                        int quantity = food.getQuantity();
-                        double price = food.getPrice();
-                        Date expiryDate = food.getExpiryDate();
-                        double netWeight = food.getNetWeight();
-
-                        // generate a string of random numbers and letters for the order ID
-                        String orderID = food.generateFoodID();
-                        String userID = login.getUserID();
-
-                        // store the food object into the queue
-                        foodOrder.write(userID + "," + orderID + "," + foodName + "," + quantity + "," + price + ","
-                                + expiryDate + "," + netWeight);
-                    }
-
-                    // close the file
-                    foodOrder.close();
-
                 }
-            }
 
+                System.out.println("Press enter to continue...");
+                strInput.nextLine();
+            } // end of while loop
+
+            System.out.println("Thank you for using the Food Inventory System.");
         }
 
         // register a new account
         else if (choice == 2) {
-            System.out.print("Enter your name: ");
-            String name = strInput.nextLine();
-
-            String password, passwordc = "";
-
-            Account account = new Account(name, passwordc);
-
-            // validate the password to meet the requirements
-            while (!account.checkingStrength()) {
-                System.out.print("Enter your password (at least 8 characters): ");
-                password = strInput.nextLine();
-
-                System.out.print("Confirm your password: ");
-                passwordc = strInput.nextLine();
-
-                // check if the password is the same as the confirmed password
-                while (!passwordc.equals(password)) {
-                    System.out.println("Password does not match.");
-                    System.out.print("Confirm your password: ");
-                    passwordc = strInput.nextLine();
-                }
-
-                account.setPassword(passwordc);
-
-                // check if the password is strong
-                if (!account.checkingStrength()) {
-                    System.out.println("Password is not strong enough.");
-                }
-
-                // check if the password contains comma, if so, ask the user to enter again
-                if (passwordc.contains(",")) {
-                    System.out.println("Password cannot contain comma.");
-                }
-            }
-
-            // birthday
-            System.out.print("Enter your birthday (DD/MM/YYYY): ");
-            String birthdate = strInput.nextLine();
-            // validate the birthdate and make sure it is in the correct format, loop until
-            // it is correct
-            while (!birthdate.matches("\\d{2}/\\d{2}/\\d{4}")) {
-                System.out.print("Invalid birthdate. Please enter your birthday (DD/MM/YYYY): ");
-                birthdate = strInput.nextLine();
-            }
-
-            boolean isMember = false;
-
-            while (isMember == false) {
-
-                System.out.print("Do you want to register for membership (Y/N) : ");
-                char membership = strInput.nextLine().charAt(0);
-
-                membership = Character.toUpperCase(membership);
-
-                if (membership == 'Y') {
-                    isMember = true;
-                } else if (membership == 'N') {
-                    isMember = false;
-                } else {
-                    System.out.println("Invalid input. Please try again.");
-                }
-
-            }
-
-            Account register = new Account(name, passwordc, birthdate, isMember);
-
-            String userID = register.generatingUserID();
-
-            // check if the registration is successful
-            if (register.registering()) {
-                System.out.println("Registration successful.");
-                // save to text file data.txt
-                FileHandling data = new FileHandling("data.txt");
-                data.write(userID + "," + name + "," + passwordc + "," + birthdate + "," + isMember + ",user");
-                data.close();
-
-            } else {
-                System.out.println("Registration failed.");
-            }
+            Account register = new Account();
+            register.registers("user");
         } else if (choice == 3) {
             System.out.println("Thank you for using the Food Inventory System.");
         } else {
             System.out.println("Invalid input. Please try again.");
         }
-        // }
 
         // close the scanner
         strInput.close();
