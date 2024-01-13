@@ -1,13 +1,6 @@
-Satay,1.10,150.0
-Roti Canai,1.50,200.0
-Vietnam Roll,2.50,150.0
 Nasi Lemak,3.50,400.0
 Mee Goreng,5.00,450.0
 Rojak,6.00,250.0
 Pasembor,6.00,450.0
-Laksa,6.00,350.0
-Nasi Ayam,6.50,400.0
-Nasi Kerabu,7.00,400.0
-Nasi Dagang,7.50,350.0
 Maggi Goreng,7.50,500.0
 Mee Udang,9.50,450.0

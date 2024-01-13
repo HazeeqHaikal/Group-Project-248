@@ -1,8 +1,4 @@
 import java.io.*;
-import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.LinkedList;
-import java.util.Queue;
 import java.util.Scanner;
 
 public class Staff extends FileHandling {
@@ -103,9 +99,6 @@ public class Staff extends FileHandling {
                 break;
             }
         }
-        // Food food = (Food) foodOrderLL.removeFromBack();
-        // food.setIsFinished(true);
-        // foodOrderLL.insertAtFront(food);
 
         // write back to foodOrder.txt
         foodOrder.setFile("foodOrder.txt");
@@ -144,13 +137,7 @@ public class Staff extends FileHandling {
         String linesFinishedOrder = finishedOrder.read();
 
         // use circular linked list to store finished order
-        // CircularLinkedList finishedOrderCLL = new CircularLinkedList();
         Circular finishedOrderCLL = new Circular();
-
-        if (linesFinishedOrder.equals("")) {
-            System.out.println("There is no finished order.");
-            return;
-        }
 
         String[] finishedOrderPerLine = linesFinishedOrder.split("\n");
 
@@ -168,6 +155,18 @@ public class Staff extends FileHandling {
                 Food food = new Food(userID, orderID, foodName, quantity, price, netWeight, isFinished);
                 finishedOrderCLL.insertAtBack(food);
             }
+        }
+
+        // if empty
+        if (finishedOrderCLL.isEmpty()) {
+            System.out.println("There is no finished order.");
+            return;
+        }
+
+        // print out the finished order
+        while (!finishedOrderCLL.isEmpty()) {
+            Food food = (Food) finishedOrderCLL.removeFromFront();
+            System.out.println(food);
         }
     }
 
@@ -214,18 +213,26 @@ public class Staff extends FileHandling {
 
         Scanner intInput = new Scanner(System.in);
 
+        // System.out.println("Removed food:\n");
+
+        Food removedObject = null;
+
         switch (choice) {
             case 1:
-                foodMenuLL.removeFromFront();
+                removedObject = (Food) foodMenuLL.removeFromFront();
                 break;
             case 2:
-                foodMenuLL.removeFromBack();
+                removedObject = (Food) foodMenuLL.removeFromBack();
                 break;
             case 3:
-                foodMenuLL.removeFromMiddle();
+                int sizeBeforeRemove = foodMenuLL.getSize();
+                removedObject = (Food) foodMenuLL.removeFromMiddle();
+                System.out.println("Removed food at index " + (foodMenuLL.getSize() / 2) + " out of " +
+                        sizeBeforeRemove + " food.\n");
                 break;
             case 4:
                 foodMenuLL.removeAll();
+                System.out.println("All food is removed.");
                 break;
             case 5:
                 System.out.print("Enter the index (1 - " + foodMenuLL.getSize() + "): ");
@@ -235,6 +242,13 @@ public class Staff extends FileHandling {
             default:
                 System.out.println("Invalid choice.");
                 break;
+        }
+
+        if (removedObject != null) {
+            System.out.println(removedObject);
+
+            // tell how many food left
+            System.out.println("There are " + foodMenuLL.getSize() + " food left.\n");
         }
 
         // write back to foodMenu.txt
@@ -258,7 +272,6 @@ public class Staff extends FileHandling {
         FileHandling foodMenu = new FileHandling("foodMenu.txt");
         String linesFoodMenu = foodMenu.read();
 
-        // LinkedListCustom foodMenuLL = new LinkedListCustom();
         Circular foodMenuLL = new Circular();
 
         if (linesFoodMenu.equals("")) {
@@ -306,7 +319,54 @@ public class Staff extends FileHandling {
         }
 
         foodMenu.close();
+    }
 
+    // view unfinished order in foodOrder.txt by one by one by using circular linked
+    // get next
+    public void viewOrder() throws Exception {
+        Scanner input = new Scanner(System.in);
+
+        // use circular linked list to store unfinished order and then get next
+        Circular orderCLL = new Circular();
+
+        FileHandling foodOrder = new FileHandling("foodOrder.txt");
+        String linesFoodOrder = foodOrder.read();
+
+        if (linesFoodOrder.equals("")) {
+            System.out.println("There is no order.");
+            return;
+        }
+
+        String[] foodOrderPerLine = linesFoodOrder.split("\n");
+
+        for (int j = 0; j < foodOrderPerLine.length; j++) {
+            String[] foodOrderDetails = foodOrderPerLine[j].split(",");
+            String userID = foodOrderDetails[0];
+            String orderID = foodOrderDetails[1];
+            String foodName = foodOrderDetails[2];
+            int quantity = Integer.parseInt(foodOrderDetails[3]);
+            double price = Double.parseDouble(foodOrderDetails[4]);
+            double netWeight = Double.parseDouble(foodOrderDetails[5]);
+            boolean isFinished = Boolean.parseBoolean(foodOrderDetails[6]);
+
+            Food food = new Food(userID, orderID, foodName, quantity, price, netWeight, isFinished);
+            orderCLL.insertAtBack(food);
+        }
+
+        System.out.println("Press enter to view next order. Press 0 to exit.\n");
+
+        while (true) {
+            Food food = (Food) orderCLL.getNext();
+
+            System.out.println(food);
+            String choice = input.nextLine();
+
+            if (choice.equals("0")) {
+                break;
+            }
+        }
+
+        foodOrder.close();
     }
 
     // toString

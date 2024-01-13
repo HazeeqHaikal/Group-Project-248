@@ -125,6 +125,13 @@ public class Circular {
         return current.getData();
     }
 
+    // get next node and start from start
+    public Object getNext() {
+        Node current = head;
+        head = head.getNext();
+        return current.getData();
+    }
+
     public int size() {
         return size;
     }

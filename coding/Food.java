@@ -287,6 +287,8 @@ public class Food {
             System.out.print("-"); // print 80 dashes
         }
 
+        System.out.println();
+
         return i;
     }
 

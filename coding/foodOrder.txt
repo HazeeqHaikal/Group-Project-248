@@ -1,5 +1,5 @@
-RYZV9F,JK1T8W,Mee Udang,3,9.50,450.0,true
-RYZV9F,V1WKAU,Nasi Lemak,5,3.50,400.0,true
 RYZV9F,PLBCDX,Nasi Dagang,1,7.50,350.0,true
+RYZV9F,JK1T8W,Mee Udang,3,9.50,450.0,true
 RYZV9F,JCXWSW,Maggi Goreng,2,7.50,500.0,true
+RYZV9F,V1WKAU,Nasi Lemak,5,3.50,400.0,true
 RYZV9F,Z73IM3,Vietnam Roll,3,2.50,150.0,true

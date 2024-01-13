@@ -144,7 +144,7 @@ public class Account extends FileHandling {
 
         // check if null
         if (lines[0].equals("")) {
-            System.out.println("You have successfully registered.");
+            System.out.println("\nYou have successfully registered.");
         }
 
         for (String line : lines) {
@@ -172,10 +172,8 @@ public class Account extends FileHandling {
 
         data.close();
 
-        System.out.println("You have successfully registered.");
+        System.out.println("\nYou have successfully registered.\n");
 
-        strInput.close();
-        intInput.close();
     }
 
     // method to verify the username and password exists

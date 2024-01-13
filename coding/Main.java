@@ -77,8 +77,20 @@ public class Main {
                 if (userType.equalsIgnoreCase("admin")) {
                     Staff staff = new Staff();
 
-                    System.out
-                            .print("1. Update Food Order List\n2. View Finished Food Order List\n3. Add Food\n4. View Food Menu\n5. Delete Food Menu\n6. Sort Food Menu By Price\n7. Register New Admin\n8. Exit\n\nEnter your choice: ");
+                    System.out.print("================================================\n");
+                    System.out.printf("|%-5s|%-40s|\n", "No.", "Menu");
+                    System.out.print("================================================\n");
+                    System.out.printf("|%-5s|%-40s|\n", "1.", "Update Food Order List");
+                    System.out.printf("|%-5s|%-40s|\n", "2.", "View Finished Food Order List");
+                    System.out.printf("|%-5s|%-40s|\n", "3.", "View All Order One By One");
+                    System.out.printf("|%-5s|%-40s|\n", "4.", "Add Food");
+                    System.out.printf("|%-5s|%-40s|\n", "5.", "View Food Menu");
+                    System.out.printf("|%-5s|%-40s|\n", "6.", "Delete Food Menu");
+                    System.out.printf("|%-5s|%-40s|\n", "7.", "Sort Food Menu By Price");
+                    System.out.printf("|%-5s|%-40s|\n", "8.", "Register New Admin");
+                    System.out.printf("|%-5s|%-40s|\n", "9.", "Exit");
+                    System.out.print("================================================\n");
+                    System.out.print("\nEnter your choice: ");
                     int adminChoice = intInput.nextInt();
 
                     System.out.println();
@@ -88,10 +100,15 @@ public class Main {
                         staff.updateFood();
                     }
 
-                    else if (adminChoice == 2)
+                    else if (adminChoice == 2){
                         staff.viewFinishedOrder();
-
+                    }
+                     
                     else if (adminChoice == 3) {
+                        staff.viewOrder();
+                    }
+
+                    else if (adminChoice == 4) {
                         System.out.print("Enter the food name: ");
                         String foodName = strInput.nextLine();
 
@@ -109,11 +126,11 @@ public class Main {
 
                     }
 
-                    else if (adminChoice == 4) {
+                    else if (adminChoice == 5) {
                         food.displayFoodMenu();
                     }
 
-                    else if (adminChoice == 5) {
+                    else if (adminChoice == 6) {
                         System.out.print(
                                 "1. Delete from front\n2. Delete from back\n3. Delete from middle\n4. Delete all\n5. Delete by index\n\nEnter your choice: ");
                         int deleteChoice = intInput.nextInt();
@@ -124,27 +141,35 @@ public class Main {
                             staff.removeFood(deleteChoice);
                     }
 
-                    else if (adminChoice == 6) {
+                    else if (adminChoice == 7) {
                         staff.sortFoodByPrice();
                         System.out.println("Food menu sorted successfully.\n");
                     }
 
-                    else if (adminChoice == 7) {
+                    else if (adminChoice == 8) {
                         Account register = new Account();
                         register.registers("admin");
                     }
 
-                    else if (adminChoice == 8) {
+                    else if (adminChoice == 9) {
                         break;
                     } else {
                         System.out.println("Invalid input. Please try again.");
                     }
 
                 } else {
-
-                    System.out.print(
-                            "1. Order food\n2. View finished order\n3. View unfinished order\n4. View total price\n5. Exit\n\nEnter your choice: ");
-                    int userChoice = intInput.nextInt();
+                    
+                    System.out.print("================================================\n");
+                    System.out.printf("|%-5s|%-40s|\n", "No.", "Menu");
+                    System.out.print("================================================\n");
+                    System.out.printf("|%-5s|%-40s|\n", "1.", "Order Food");
+                    System.out.printf("|%-5s|%-40s|\n", "2.", "View Finished Order");
+                    System.out.printf("|%-5s|%-40s|\n", "3.", "View Unfinished Order");
+                    System.out.printf("|%-5s|%-40s|\n", "4.", "View Total Price");
+                    System.out.printf("|%-5s|%-40s|\n", "5.", "Exit");
+                    System.out.print("================================================\n");
+                    System.out.print("\nEnter your choice: ");
+                    int userChoice= intInput.nextInt();
 
                     System.out.println();
 

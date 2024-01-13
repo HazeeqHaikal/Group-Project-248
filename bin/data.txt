@@ -3,3 +3,5 @@ RYZV9F,khairul,khairul,25/03/2004,true,user
 R60W20,shahmir,sh@HM1rs,29/05/2004,false,user
 4TBPQV,hanafi,h@N@F1Ig,5/05/2004,false,user
 J8FBBM,samuel,s@MU3las,9/7/2004,false,user
+8XAZWS,faris,F@R1sS##A,11/12/2004,true,staff
+129717,redza,r3dZ@#$A,24/5/2004,false,staff
